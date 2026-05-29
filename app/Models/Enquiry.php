@@ -11,6 +11,6 @@ class Enquiry extends Model
 
     protected $table = "enquiries";
 
-    protected $fillable = ['name', 'email' , 'phone','website_url','service_intrested','monthly_budget','about'];
+    protected $fillable = ['name', 'email' , 'phone','website_url','service_intrested','monthly_budget','designation','about'];
 
 }

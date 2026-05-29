@@ -34,6 +34,7 @@ class EnquiryController extends Controller
         $data['website_url'] = $request->website_url ?? '';
         $data['service_intrested'] = $request->service_intrested ?? '';
         $data['monthly_budget'] = $request->monthly_budget ?? '';
+        $data['designation'] = $request->designation ?? '';
         $data['about'] = $request->about ?? '';
         $data['created_at'] = date('Y-m-d H:i:s');
 
