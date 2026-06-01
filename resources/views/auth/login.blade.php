@@ -1,73 +1,143 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+<head>
+  <meta charset="utf-8" />
+  <title>Humans Of Web</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-url" content="{{ url('/') }}">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta content="" name="description" />
+  <meta content="Coderthemes" name="author" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <link href="{{ asset('assets/admin/css/adminlte.min.css') }}" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="{{ asset('assets/admin/plugins/fontawesome-free/css/all.min.css')}}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css">
+  <style>
+    #loader {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+    }
 
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+    #loader::after {
+      content: '';
+      width: 60px;
+      height: 60px;
+      display: block;
+      position: absolute;
+      left: calc(50% - 30px);
+      top: calc(50% - 30px);
+      border: 5px solid #f5f5f5;
+      border-radius: 50%;
+      border-top: 5px solid #e1306c;
+      -webkit-animation: spin 1s linear infinite;
+      animation: spin 1s linear infinite;
+    }
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+      }
 
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
 
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
 
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+      100% {
+        transform: rotate(360deg);
+      }
 
-                        <div class="row mb-3">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+    }
+  </style>
+</head>
+<div id="loader"></div>
 
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+<body class="hold-transition login-page" onload="myFunction()">
+  <div class="login-box">
+    <!-- /.login-logo -->
+    <div class="card card-outline card-primary">
+      <div class="card-header text-center">
+        <a href="javascript:void(0)" class="h1"><b>Humans Of Web</b></a>
+      </div>
+      <div class="card-body">
+        <p class="login-box-msg">Sign in to start your session</p>
 
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
+        <span id="loginMsg"></span>
+        <form class="px-4" id="UserLoginFormid" method="post">
+          <div class="form-group">
+            <div class="input-group">
+              <input type="email" class="form-control" name="email" placeholder="Email">
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-envelope"></span>
                 </div>
+              </div>
             </div>
-        </div>
+            <span class="email_err text-danger error"></span>
+          </div>
+          <div class="form-group">
+            <div class="input-group mb-3">
+              <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-lock"></span>
+                </div>
+              </div>
+            </div>
+            <span class="password_err text-danger error"></span>
+          </div>
+          <div class="row">
+            <div class="col-8">
+            </div>
+
+            <div class="col-4">
+              <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            </div>
+
+          </div>
+        </form>
+      </div>
     </div>
-</div>
-@endsection
+
+  </div>
+  <script src="{{ asset('assets/admin/plugins/jquery/jquery.min.js')}}"></script>
+  <script src="{{ asset('assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js"></script>
+  <script type="text/javascript" src="{{ asset('assets/admin/js/jquery.validate.js')}}"></script>
+  <script src="{{ asset('assets/admin/scripts/login.js')}}"></script>
+  <script src="{{asset('assets/admin/scripts/helper.js')}}" type="text/javascript"></script>
+  <script type="text/javascript">
+    $(function() {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        isLocal: false
+      });
+    });
+
+    function myFunction() {
+      setTimeout(showPage, 30);
+    }
+
+    function showPage() {
+      document.getElementById("loader").style.display = "none";
+    }
+  </script>
+</body>
+
+</html>

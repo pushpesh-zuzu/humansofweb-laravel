@@ -1,11 +1,21 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EnquiryController;
 
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check()) {
+        return redirect('/admin/dashboard');
+    }
+    return view('auth.login');
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::prefix("admin")->middleware(['auth'])->group(function () {
+    Route::get('dashboard',[DashboardController::class, 'dashboard']);
+    Route::resource('enquiries', EnquiryController::class);
+});
